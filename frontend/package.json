@@ -39,5 +39,6 @@
   },
   "devDependencies": {
     "eslint-webpack-plugin": "^4.2.0"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

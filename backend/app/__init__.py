@@ -20,5 +20,7 @@ def create_app():
     app.register_blueprint(resume_bp, url_prefix="/api/resume")
     app.register_blueprint(job_bp, url_prefix="/api/job")
     app.register_blueprint(recommend_bp, url_prefix="/api/recommend")
+    
+    CORS(app, resources={r"/*": {"origins": "http://localhost:3007"}})
 
     return app

@@ -8,57 +8,70 @@ const ResumeUpload = () => {
   const [resumeId, setResumeId] = useState(null);
   const [parsedData, setParsedData] = useState(null);
   const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
-
+  // Handle file selection
   const handleFileChange = (e) => {
-  const selectedFile = e.target.files[0];
-  if (selectedFile && selectedFile.type.includes("pdf")) {
-    setFile(selectedFile);
-    setPdfPreviewUrl(URL.createObjectURL(selectedFile));  // ✅ create preview
-  } else {
-    alert("Only PDF files are allowed.");
-  }
-};
-
-
-  const handleUpload = async () => {
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    setIsUploading(true);
-
-    try {
-      const res = await fetch("http://localhost:5000/api/resume/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setUploadSuccess(true);
-        setResumeId(data.resume_id);
-        localStorage.setItem("resumeId", data.resume_id);
-        setParsedData(data);
-      } else {
-        alert("Upload failed.");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("An error occurred while uploading.");
+    const selectedFile = e.target.files[0];
+    if (selectedFile && selectedFile.type.includes("pdf")) {
+      setFile(selectedFile);
+      setPdfPreviewUrl(URL.createObjectURL(selectedFile)); // Create preview
+      setErrorMessage(""); // Clear any previous error
+    } else {
+      setErrorMessage("Only PDF files are allowed.");
     }
-
-    setIsUploading(false);
   };
 
+  // Handle file upload
+  const handleUpload = async () => {
+    if (!file) return;
+  
+    const formData = new FormData();
+    formData.append("file", file);
+  
+    setIsUploading(true);
+    setErrorMessage(""); // Clear any previous error
+  
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/api/resume/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+  
+      if (res.ok) {
+        const data = await res.json();
+  
+        // Validate the response structure
+        if (data.resume_id && data.name && data.email && data.skills) {
+          setUploadSuccess(true);
+          setResumeId(data.resume_id);
+          localStorage.setItem("resumeId", data.resume_id);
+          setParsedData(data);
+        } else {
+          throw new Error("Invalid response structure from the server.");
+        }
+      } else {
+        const errorData = await res.json();
+        setErrorMessage(errorData.message || "Upload failed.");
+      }
+    } catch (error) {
+      console.error("Error uploading resume:", error);
+      setErrorMessage("An error occurred while uploading. Please try again.");
+    }
+  
+    setIsUploading(false);
+  };
+  // Navigate to recommendations
   const handleViewRecommendations = () => {
     window.location.href = "/dashboard";
   };
 
   return (
     <div className="resume-upload">
-      {/* 🔹 Banner Image */}
+      {/* Banner Image */}
       <div className="resume-banner">
         <img
           src={`${process.env.PUBLIC_URL}/resume.jpg`}
@@ -80,6 +93,8 @@ const ResumeUpload = () => {
         </p>
       )}
 
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+
       <button
         onClick={handleUpload}
         disabled={!file || isUploading}
@@ -99,7 +114,7 @@ const ResumeUpload = () => {
           <h3>Resume Parsed Successfully</h3>
           <p><strong>Name:</strong> {parsedData.name}</p>
           <p><strong>Email:</strong> {parsedData.email}</p>
-          <p><strong>Skills:</strong> {parsedData.skills}</p>
+          <p><strong>Skills:</strong> {parsedData.skills.join(", ")}</p>
 
           <button onClick={handleViewRecommendations} className="upload-btn view-btn">
             View Job Recommendations
@@ -107,6 +122,12 @@ const ResumeUpload = () => {
         </div>
       )}
 
+      {pdfPreviewUrl && (
+        <div className="pdf-preview">
+          <h4>PDF Preview:</h4>
+          <iframe src={pdfPreviewUrl} title="PDF Preview" width="100%" height="400px" />
+        </div>
+      )}
     </div>
   );
 };
