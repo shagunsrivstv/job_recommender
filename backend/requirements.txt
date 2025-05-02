@@ -1,0 +1,11 @@
+Flask
+Flask-RESTful
+Flask-SQLAlchemy
+Flask-Cors
+nltk
+scikit-learn
+pandas
+PyMuPDF
+python-docx
+spacy
+redis

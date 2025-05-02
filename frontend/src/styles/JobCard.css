@@ -1,0 +1,133 @@
+.job-list {
+    text-align: center;
+    padding: 30px;
+    background: #f9f9f9;
+}
+
+.job-list h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.job-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    padding: 10px;
+}
+
+.job-card {
+    background: linear-gradient(135deg, #ffffff, #f3f3f3);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    text-align: left;
+    border-left: 6px solid rgb(94, 23, 23);
+}
+
+.job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.job-card h3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 8px;
+}
+
+.job-card p {
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0;
+}
+
+.job-card button {
+    background: rgb(94, 23, 23);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s, transform 0.2s;
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.job-card button:hover {
+    background: rgb(94, 23, 23);
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .job-list {
+        padding: 20px;
+    }
+
+    .job-list h2 {
+        font-size: 24px;
+    }
+
+    .job-container {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 15px;
+    }
+
+    .job-card {
+        padding: 15px;
+    }
+
+    .job-card h3 {
+        font-size: 18px;
+    }
+
+    .job-card p {
+        font-size: 13px;
+    }
+
+    .job-card button {
+        font-size: 14px;
+        padding: 10px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .job-list {
+        padding: 15px;
+    }
+
+    .job-list h2 {
+        font-size: 20px;
+    }
+
+    .job-container {
+        grid-template-columns: 1fr;
+    }
+
+    .job-card {
+        padding: 10px;
+    }
+
+    .job-card h3 {
+        font-size: 16px;
+    }
+
+    .job-card p {
+        font-size: 12px;
+    }
+
+    .job-card button {
+        font-size: 12px;
+        padding: 8px 14px;
+    }
+}

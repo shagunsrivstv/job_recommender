@@ -1,0 +1,100 @@
+/* Global Styles */
+body {
+  background-color: #f4f4f4;
+  color: black;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+}
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #007bff;
+  padding: 15px 30px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .logo {
+  width: 50px;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 10px 20px;
+}
+
+/* Centered Main Content */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  text-align: center;
+  padding: 20px;
+}
+
+h1, h2 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Buttons */
+.button,
+.cta-button {
+  background-color:  rgb(94, 23, 23);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.button:hover,
+.cta-button:hover {
+  background-color:  rgb(45, 38, 38);
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Align content towards the top */
+  padding-top: 20vh; /* Push content slightly down */
+  text-align: center;
+  color: white;
+  background-size: cover;
+  background-position: center -100px; /* Move image up by 50px */
+  background-repeat: no-repeat;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3); /* Dark overlay */
+  z-index: -1;
+  
+}
+
+/* Hero Text */
+.hero h1 {
+  font-size: 3.0rem;
+  font-weight: bold;
+  color: #ffffff; /* White for strong contrast */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Subtle shadow for better readability */
+}
