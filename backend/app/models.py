@@ -9,7 +9,8 @@ class Resume(db.Model):
 
 class Job(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(120))
-    company = db.Column(db.String(120))
-    description = db.Column(db.Text)
-    skills = db.Column(db.Text)
+    title = db.Column(db.String(100), nullable=False)
+    company = db.Column(db.String(100), nullable=False)
+    location = db.Column(db.String(100), nullable=False)
+    skills = db.Column(db.ARRAY(db.String), nullable=False)  # Array of skills
+    description = db.Column(db.Text, nullable=True)

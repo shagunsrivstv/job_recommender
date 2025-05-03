@@ -1,81 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "../styles/ResumeUpload.css";
+import { AuthContext } from "../Component/AuthContext";
 
 const ResumeUpload = () => {
   const [file, setFile] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
-  const [resumeId, setResumeId] = useState(null);
-  const [parsedData, setParsedData] = useState(null);
-  const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState(""); // Tracks the message to display
+  const { isLoggedIn } = useContext(AuthContext); // Access login state from context
 
-  // Handle file selection
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile && selectedFile.type.includes("pdf")) {
       setFile(selectedFile);
-      setPdfPreviewUrl(URL.createObjectURL(selectedFile)); // Create preview
-      setErrorMessage(""); // Clear any previous error
+      setMessage(""); // Clear any previous messages
     } else {
-      setErrorMessage("Only PDF files are allowed.");
+      setMessage("Only PDF files are allowed.");
     }
   };
 
-  // Handle file upload
-  const handleUpload = async () => {
-    if (!file) return;
-  
-    const formData = new FormData();
-    formData.append("file", file);
-  
-    setIsUploading(true);
-    setErrorMessage(""); // Clear any previous error
-  
-    try {
-      const res = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"}/api/resume/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-  
-      if (res.ok) {
-        const data = await res.json();
-  
-        // Validate the response structure
-        if (data.resume_id && data.name && data.email && data.skills) {
-          setUploadSuccess(true);
-          setResumeId(data.resume_id);
-          localStorage.setItem("resumeId", data.resume_id);
-          setParsedData(data);
-        } else {
-          throw new Error("Invalid response structure from the server.");
-        }
-      } else {
-        const errorData = await res.json();
-        setErrorMessage(errorData.message || "Upload failed.");
-      }
-    } catch (error) {
-      console.error("Error uploading resume:", error);
-      setErrorMessage("An error occurred while uploading. Please try again.");
+  const handleUpload = () => {
+    if (!isLoggedIn) {
+      setMessage("Please log in first to upload your resume.");
+      return;
     }
-  
-    setIsUploading(false);
-  };
-  // Navigate to recommendations
-  const handleViewRecommendations = () => {
-    window.location.href = "/dashboard";
+
+    if (file) {
+      setMessage(`File "${file.name}" uploaded successfully!`);
+    } else {
+      setMessage("Please select a file to upload.");
+    }
   };
 
   return (
     <div className="resume-upload">
-      {/* Banner Image */}
+      {/* 🔹 Banner Image */}
       <div className="resume-banner">
         <img
           src={`${process.env.PUBLIC_URL}/resume.jpg`}
-          alt="Job Success"
+          alt="New Image Description"
         />
       </div>
 
@@ -93,41 +54,12 @@ const ResumeUpload = () => {
         </p>
       )}
 
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-      <button
-        onClick={handleUpload}
-        disabled={!file || isUploading}
-        className="upload-btn"
-      >
-        {isUploading ? (
-          <>
-            <span className="spinner" /> Uploading...
-          </>
-        ) : (
-          "Upload Resume"
-        )}
+      <button onClick={handleUpload} disabled={!file} className="upload-btn">
+        Upload Resume
       </button>
 
-      {uploadSuccess && parsedData && (
-        <div className="parsed-output">
-          <h3>Resume Parsed Successfully</h3>
-          <p><strong>Name:</strong> {parsedData.name}</p>
-          <p><strong>Email:</strong> {parsedData.email}</p>
-          <p><strong>Skills:</strong> {parsedData.skills.join(", ")}</p>
-
-          <button onClick={handleViewRecommendations} className="upload-btn view-btn">
-            View Job Recommendations
-          </button>
-        </div>
-      )}
-
-      {pdfPreviewUrl && (
-        <div className="pdf-preview">
-          <h4>PDF Preview:</h4>
-          <iframe src={pdfPreviewUrl} title="PDF Preview" width="100%" height="400px" />
-        </div>
-      )}
+      {/* 🔹 Message Display */}
+      {message && <p className="upload-message">{message}</p>}
     </div>
   );
 };

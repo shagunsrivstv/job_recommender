@@ -18,7 +18,7 @@ const Home = () => {
                 <div className="hero-content">
                     <h1 className="animated-text">Find Your Dream Job Effortlessly</h1>
                     <p className="animated-text">Discover top opportunities tailored to your skills and preferences.</p>
-                    <a href="/jobs" className="cta-button">Browse Jobs</a>
+                    <a href="/profile" className="cta-button">Browse Jobs</a>
                 </div>
             </div>
 
